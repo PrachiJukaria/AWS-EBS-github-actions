@@ -27,7 +27,7 @@ jobs:
         run: |
           aws elasticbeanstalk create-application-version \
           --application-name Blog-app-EBS \
-          --source-bundle S3Bucket="elasticbeanstalk-ap-south-1-113553330435",S3Key="deploy.zip" \
+          --source-bundle S3Bucket=elasticbeanstalk-ap-south-1-113553330435,S3Key=deploy.zip \
           --version-label "ver-${{ github.sha }}" \
           --description "commit-sha-${{ github.sha }}"
 
