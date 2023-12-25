@@ -13,7 +13,7 @@ jobs:
       - name: Create Deployment Package
         run: zip -r deploy.zip .
 
-      - name: setting up AWS credentials
+      - name: deploying to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
           aws_access_key: ${{ secrets.ACCESS_KEY }}
