@@ -14,22 +14,14 @@ jobs:
         run: zip -r deploy.zip .
 
       - name: setting up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: einaregilsson/beanstalk-deploy@v21
         with:
-          aws-region: us-east-1
-          aws-access-key-id: ${{ secrets.ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.SECRET_KEY }}
-      
-      - name: upload package to S3 bucket
-        run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-south-1-113553330435/
-
-      - name: Create new Elastic Beanstalk Version
-        run: |
-          aws elasticbeanstalk create-application-version \
-          --application-name Blog-app-EBS \
-          --source-bundle S3Bucket=elasticbeanstalk-ap-south-1-113553330435,S3Key=deploy.zip \
-          --version-label "ver-${{ github.sha }}" \
-          --description "commit-sha-${{ github.sha }}"
-
-      - name: Deploy new ElasticBeanstalk Application Version
-        run: aws elasticbeanstalk update-environment --environment-name Blog-app-EBS-env --version-label "ver-${{ github.sha }}"
+          aws_access_key: ${{ secrets.ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.SECRET_KEY }}
+          application_name: Blog-app-EBS
+          environment_name: Blog-app-EBS-env
+          version_label: ${{ github.sha }}
+          existing_bucket_name: elasticbeanstalk-ap-south-1-113553330435
+          region: ap-south-1
+          deployment_package: deploy.zip
+          use_existing_version_if_available: "true"
