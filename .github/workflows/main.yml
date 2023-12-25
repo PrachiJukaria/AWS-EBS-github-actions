@@ -13,12 +13,12 @@ jobs:
       - name: Create Deployment Package
         run: zip -r deploy.zip .
 
-      - name: configure AWS Credentials
+      - name: setting up AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
+          aws-region: us-east-1
           aws-access-key-id: ${{ secrets.ACCESS_KEY }}
-          aws-secret-access-key: $${{ secrets.SECRET_KEY }}
-          aws-region: "ap-south-1"
+          aws-secret-access-key: ${{ secrets.SECRET_KEY }}
       
       - name: upload package to S3 bucket
         run: aws s3 cp deploy_package.zip s3://elasticbeanstalk-ap-south-1-113553330435/
