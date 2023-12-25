@@ -7,13 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v1
         
       - name: Create Deployment Package
         run: zip -r deploy.zip .
 
       - name: configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.ACCESS_KEY }}
           aws-secret-access-key: $${{ secrets.SECRET_KEY }}
