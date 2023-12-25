@@ -21,7 +21,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.SECRET_KEY }}
       
       - name: upload package to S3 bucket
-        run: aws s3 cp deploy_package.zip s3://elasticbeanstalk-ap-south-1-113553330435/
+        run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-south-1-113553330435/
 
       - name: Create new Elastic Beanstalk Version
         run: |
