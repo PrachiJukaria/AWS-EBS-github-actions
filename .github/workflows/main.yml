@@ -1,0 +1,34 @@
+name: Deploy application on AWS Elastic Beanstalk
+on:
+  push:
+    branches: master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v1
+        
+      - name: Create Deployment Package
+        run: zip -r deploy.zip .
+
+      - name: configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+          aws-secret-access-key: $${ secrets.SECRET_KEY }}
+          aws-region: "ap-south-1"
+      
+      - name: upload package to S3 bucket
+        run: aws s3 cp deploy_package.zip s3://elasticbeanstalk-ap-south-1-113553330435/
+
+      - name: Create new Elastic Beanstalk Version
+        run: |
+          aws elasticbeanstalk create-application-version \
+          --application-name Blog-app-EBS \
+          --source-bundle S3Bucket="elasticbeanstalk-ap-south-1-113553330435",S3Key="deploy.zip" \
+          --version-label "ver-${{ github.sha }}" \
+          --description "commit-sha-${{ github.sha }}"
+
+      - name: Deploy new ElasticBeanstalk Application Version
+        run: aws elasticbeanstalk update-environment --environment-name Blog-app-EBS-env --version-label "ver-${{ github.sha }}"
